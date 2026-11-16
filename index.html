@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#111111">
+    <title>VOLT Customs | Part &amp; Color Preview</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #171717;
+        background: #f3f3f3;
+        font-synthesis: none;
+        text-rendering: optimizeLegibility;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-width: 320px;
+        margin: 0;
+      }
+
+      .site-header {
+        padding: 28px max(24px, calc((100% - 1120px) / 2));
+        color: #fff;
+        background: #111;
+      }
+
+      .site-name {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 800;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      main {
+        width: min(1120px, calc(100% - 32px));
+        margin: 40px auto;
+      }
+
+      .part-gallery {
+        padding: clamp(20px, 4vw, 40px);
+        border: 1px solid #dedede;
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 12px 35px rgb(0 0 0 / 6%);
+      }
+
+      .gallery-heading {
+        margin-bottom: 28px;
+      }
+
+      .gallery-heading h1 {
+        margin: 0 0 10px;
+        font-size: clamp(26px, 4vw, 38px);
+        letter-spacing: -0.04em;
+      }
+
+      .gallery-heading p {
+        max-width: 620px;
+        margin: 0;
+        color: #626262;
+        line-height: 1.6;
+      }
+
+      .configurator {
+        display: grid;
+        grid-template-columns: minmax(0, 1.4fr) minmax(240px, 0.8fr);
+        gap: 36px;
+        align-items: start;
+      }
+
+      .part-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 0 0 22px;
+      }
+
+      .part-tab {
+        min-height: 44px;
+        padding: 10px 14px;
+        border: 1px solid #dedede;
+        border-radius: 6px;
+        color: #222;
+        background: #f5f5f5;
+        cursor: pointer;
+        font: inherit;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .part-tab[aria-pressed="true"] {
+        border-color: #111;
+        color: #fff;
+        background: #111;
+      }
+
+      button:focus-visible {
+        outline: 3px solid #1769d2;
+        outline-offset: 3px;
+      }
+
+      .swatch-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .swatch-card {
+        min-width: 0;
+        padding: 10px;
+        border: 1px solid #dedede;
+        border-radius: 7px;
+        color: #222;
+        background: #fafafa;
+        cursor: pointer;
+        font: inherit;
+        font-size: 14px;
+        font-weight: 700;
+        text-align: left;
+      }
+
+      .swatch-card[aria-pressed="true"] {
+        border-color: #111;
+        box-shadow: 0 0 0 2px #111;
+      }
+
+      .swatch {
+        display: block;
+        height: 58px;
+        margin-bottom: 9px;
+        border: 1px solid rgb(0 0 0 / 14%);
+        border-radius: 4px;
+      }
+
+      .preview-panel {
+        padding: 20px;
+        border: 1px solid #dedede;
+        border-radius: 8px;
+        background: #f8f8f8;
+      }
+
+      .preview-panel h2 {
+        margin: 0 0 14px;
+        font-size: 17px;
+      }
+
+      .preview-sample {
+        display: grid;
+        min-height: 190px;
+        place-items: center;
+        overflow: hidden;
+        border-radius: 6px;
+        background: #e8e8e8;
+      }
+
+      .sample-part {
+        width: min(72%, 220px);
+        height: 96px;
+        border: 1px solid rgb(0 0 0 / 18%);
+        border-radius: 48% 18% 42% 20%;
+        background: #111;
+        box-shadow: 0 14px 20px rgb(0 0 0 / 18%);
+        transform: skewX(-12deg);
+        transition: background 180ms ease;
+      }
+
+      .preview-name {
+        margin: 16px 0 4px;
+        font-size: 16px;
+        font-weight: 700;
+      }
+
+      .preview-value {
+        margin: 0;
+        color: #626262;
+        font-size: 13px;
+      }
+
+      .preview-note {
+        margin: 14px 0 0;
+        color: #626262;
+        font-size: 12px;
+        line-height: 1.5;
+      }
+
+      .preview-label {
+        min-height: 1.5em;
+        margin: 18px 0 0;
+        color: #444;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      @media (max-width: 760px) {
+        main {
+          margin: 20px auto;
+        }
+
+        .configurator {
+          grid-template-columns: 1fr;
+          gap: 24px;
+        }
+
+        .preview-panel {
+          grid-row: 1;
+        }
+      }
+
+      @media (max-width: 500px) {
+        .swatch-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <p class="site-name">VOLT Customs</p>
+    </header>
+
+    <main>
+      <section class="part-gallery" aria-labelledby="galleryTitle">
+        <div class="gallery-heading">
+          <h1 id="galleryTitle">Part &amp; color preview</h1>
+          <p>Choose a bike part, then select a finish to see a live color sample.</p>
+        </div>
+
+        <div class="configurator">
+          <div>
+            <nav class="part-tabs" aria-label="Choose a part category">
+              <button class="part-tab" type="button" data-part="seat" aria-pressed="true">Seat Covers</button>
+              <button class="part-tab" type="button" data-part="grips" aria-pressed="false">Grips</button>
+              <button class="part-tab" type="button" data-part="plastics" aria-pressed="false">Plastics</button>
+              <button class="part-tab" type="button" data-part="wheels" aria-pressed="false">Wheels</button>
+              <button class="part-tab" type="button" data-part="graphics" aria-pressed="false">Graphics</button>
+              <button class="part-tab" type="button" data-part="fenders" aria-pressed="false">Fenders</button>
+            </nav>
+
+            <div class="swatch-grid" id="swatchGrid" role="group" aria-label="Available colors"></div>
+            <p class="preview-label" id="previewLabel" role="status" aria-live="polite"></p>
+          </div>
+
+          <aside class="preview-panel" aria-labelledby="previewTitle">
+            <h2 id="previewTitle">Live color sample</h2>
+            <div class="preview-sample" aria-hidden="true">
+              <div class="sample-part" id="samplePart"></div>
+            </div>
+            <p class="preview-name" id="previewName"></p>
+            <p class="preview-value" id="previewValue"></p>
+            <p class="preview-note">This standalone sample previews the finish; it is not a 3D bike model.</p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const partColors = {
+        seat: {
+          label: "Seat Covers",
+          colors: [
+            { name: "Black", color: "#111111" },
+            { name: "White", color: "#eeeeee" },
+            { name: "Red", color: "#d71920" },
+            { name: "Blue", color: "#1455c0" },
+            { name: "Gray", color: "#777777" },
+            { name: "Tan", color: "#b58b5a" },
+            { name: "Purple", color: "#713c91" },
+            { name: "Green", color: "#16834a" },
+            { name: "Orange", color: "#ed7614" }
+          ]
+        },
+        grips: {
+          label: "Grips",
+          colors: [
+            { name: "Black", color: "#111111" },
+            { name: "White", color: "#eeeeee" },
+            { name: "Red", color: "#d71920" },
+            { name: "Blue", color: "#1455c0" },
+            { name: "Green", color: "#16834a" },
+            { name: "Purple", color: "#713c91" },
+            { name: "Orange", color: "#ed7614" },
+            { name: "Gold", color: "#c5a12b" }
+          ]
+        },
+        plastics: {
+          label: "Plastics",
+          colors: [
+            { name: "Black", color: "#111111" },
+            { name: "White", color: "#eeeeee" },
+            { name: "Red", color: "#d71920" },
+            { name: "Blue", color: "#1455c0" },
+            { name: "Green", color: "#16834a" },
+            { name: "Gray", color: "#777777" },
+            { name: "Orange", color: "#ed7614" },
+            { name: "Yellow", color: "#e6c51a" },
+            { name: "Purple", color: "#713c91" }
+          ]
+        },
+        wheels: {
+          label: "Wheels & Rims",
+          colors: [
+            { name: "Black", color: "#111111" },
+            { name: "Silver", color: "#bfc3c7" },
+            { name: "White", color: "#eeeeee" },
+            { name: "Red", color: "#d71920" },
+            { name: "Blue", color: "#1455c0" },
+            { name: "Gold", color: "#c5a12b" },
+            { name: "Bronze", color: "#8b623e" },
+            { name: "Purple", color: "#713c91" }
+          ]
+        },
+        graphics: {
+          label: "Graphics Kits",
+          colors: [
+            { name: "Blackout", color: "#111111", preview: "#111111" },
+            { name: "Black & White", color: "#777777", preview: "linear-gradient(135deg, #111 0 50%, #eee 50%)" },
+            { name: "Red & Black", color: "#9e1720", preview: "linear-gradient(135deg, #9e1720 0 50%, #111 50%)" },
+            { name: "Blue & White", color: "#2361aa", preview: "linear-gradient(135deg, #2361aa 0 50%, #eee 50%)" },
+            { name: "Green & Black", color: "#247346", preview: "linear-gradient(135deg, #247346 0 50%, #111 50%)" },
+            { name: "Orange & Black", color: "#bd5b12", preview: "linear-gradient(135deg, #bd5b12 0 50%, #111 50%)" },
+            { name: "Purple & Black", color: "#623b83", preview: "linear-gradient(135deg, #623b83 0 50%, #111 50%)" },
+            { name: "Neon Green", color: "#8bc900", preview: "linear-gradient(135deg, #8bc900 0 50%, #111 50%)" }
+          ]
+        },
+        fenders: {
+          label: "Fenders",
+          colors: [
+            { name: "Black", color: "#111111" },
+            { name: "White", color: "#eeeeee" },
+            { name: "Red", color: "#d71920" },
+            { name: "Blue", color: "#1455c0" },
+            { name: "Green", color: "#16834a" },
+            { name: "Gray", color: "#777777" },
+            { name: "Orange", color: "#ed7614" },
+            { name: "Yellow", color: "#e6c51a" }
+          ]
+        }
+      };
+
+      const colorInputIds = {
+        seat: "seatColor",
+        grips: "gripColor",
+        plastics: "plasticColor",
+        wheels: "wheelColor",
+        graphics: "graphicsColor",
+        fenders: "plasticColor"
+      };
+      const selectedColors = Object.fromEntries(
+        Object.entries(partColors).map(([part, data]) => [part, data.colors[0]])
+      );
+      const grid = document.getElementById("swatchGrid");
+      const previewLabel = document.getElementById("previewLabel");
+      const previewName = document.getElementById("previewName");
+      const previewValue = document.getElementById("previewValue");
+      const samplePart = document.getElementById("samplePart");
+      const tabs = document.querySelectorAll(".part-tab");
+
+      function selectColor(part, color) {
+        selectedColors[part] = color;
+        const data = partColors[part];
+        samplePart.style.background = color.preview || color.color;
+        previewName.textContent = `${data.label}: ${color.name}`;
+        previewValue.textContent = color.color.toUpperCase();
+        previewLabel.textContent = `${color.name} selected for ${data.label}.`;
+
+        const input = document.getElementById(colorInputIds[part]);
+        if (input instanceof HTMLInputElement) {
+          input.value = color.color;
+          input.dispatchEvent(new Event("input", { bubbles: true }));
+        }
+      }
+
+      function showPart(part) {
+        const data = partColors[part];
+        if (!data) {
+          return;
+        }
+
+        tabs.forEach((tab) => {
+          tab.setAttribute("aria-pressed", String(tab.dataset.part === part));
+        });
+
+        grid.replaceChildren();
+        data.colors.forEach((color) => {
+          const card = document.createElement("button");
+          card.type = "button";
+          card.className = "swatch-card";
+          card.setAttribute("aria-pressed", String(selectedColors[part] === color));
+
+          const swatch = document.createElement("span");
+          swatch.className = "swatch";
+          swatch.setAttribute("aria-hidden", "true");
+          swatch.style.background = color.preview || color.color;
+
+          const name = document.createElement("span");
+          name.textContent = color.name;
+          card.append(swatch, name);
+
+          card.addEventListener("click", () => {
+            grid.querySelectorAll(".swatch-card").forEach((item) => {
+              item.setAttribute("aria-pressed", "false");
+            });
+            card.setAttribute("aria-pressed", "true");
+            selectColor(part, color);
+          });
+
+          grid.appendChild(card);
+        });
+
+        selectColor(part, selectedColors[part]);
+      }
+
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => showPart(tab.dataset.part));
+      });
+
+      showPart("seat");
+    </script>
+  </body>
+</html>
