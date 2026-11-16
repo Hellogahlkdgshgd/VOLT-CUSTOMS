@@ -1,436 +1,591 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#111111">
-    <title>VOLT Customs | Part &amp; Color Preview</title>
-    <style>
-      :root {
-        color-scheme: light;
-        font-family: Arial, Helvetica, sans-serif;
-        color: #171717;
-        background: #f3f3f3;
-        font-synthesis: none;
-        text-rendering: optimizeLegibility;
-      }
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOLT CUSTOMS | Custom Electric Dirt Bikes</title>
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
 
-      * {
-        box-sizing: border-box;
-      }
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Arial,sans-serif;color:#111;background:#fff}
+header{background:#080808;color:white;padding:20px 7%;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:20}
+.logo{font-size:25px;font-weight:900;letter-spacing:3px}
+.logo span{color:#999}
+nav{display:flex;gap:22px;flex-wrap:wrap}
+nav a{color:white;text-decoration:none;font-size:12px;font-weight:bold}
+nav a:hover{color:#aaa}
+.hero{background:#090909;color:white;padding:85px 8%;display:grid;grid-template-columns:1fr 1fr;gap:35px;align-items:center}
+.hero h1{font-size:clamp(45px,7vw,82px);line-height:.95;letter-spacing:-3px}
+.hero p{color:#bbb;line-height:1.8;margin:25px 0;max-width:500px}
+.hero img{width:100%;border-radius:5px;object-fit:cover}
+.hero figcaption{font-size:11px;color:#aaa;margin-top:8px}
+.btn{display:inline-block;background:white;color:black;padding:16px 25px;text-decoration:none;font-weight:bold;border:0;cursor:pointer}
+.btn:hover{background:#ccc}
+section{padding:75px 8%}
+.heading{font-size:36px;font-weight:900;margin-bottom:12px}
+.sub{color:#777;line-height:1.7;margin-bottom:30px}
+.models{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
+.model{padding:25px;border:1px solid #ddd;background:#fafafa;font-weight:bold}
+.model small{display:block;color:#777;margin-top:9px;font-weight:normal}
+.dark{background:#111;color:white}
+.dark .sub{color:#aaa}
+.builder{background:#f3f3f3}
+.builder-grid{display:grid;grid-template-columns:1fr 1fr;gap:25px;align-items:start}
+.panel{background:white;color:#111;padding:24px;border:1px solid #ddd}
+.preview-panel{position:sticky;top:95px}
+model-viewer{width:100%;height:420px;background:radial-gradient(circle,#444,#171717);--poster-color:transparent}
+.model-note{font-size:12px;color:#777;line-height:1.5;margin-top:12px}
+label{display:block;font-size:13px;font-weight:bold;margin:17px 0 8px}
+input,select,textarea{width:100%;padding:13px;border:1px solid #ccc;background:#fff;font-size:14px}
+textarea{min-height:90px;resize:vertical}
+button{font-family:inherit}
+.part-gallery{background:#fff;color:#111;padding:25px;border:1px solid #ddd;margin-bottom:20px}
+.part-tabs{display:flex;flex-wrap:wrap;gap:7px;margin:18px 0}
+.part-tab{background:#eee;color:#111;border:1px solid #ddd;padding:11px 13px;font-size:12px;font-weight:bold;cursor:pointer}
+.part-tab.active{background:#111;color:white}
+.swatch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.swatch-card{border:1px solid #ddd;background:#fafafa;padding:9px;cursor:pointer;text-align:center;font-size:12px;font-weight:bold}
+.swatch-card.active{outline:3px solid #111}
+.swatch{height:55px;border:1px solid #ccc;margin-bottom:8px}
+.preview-label{font-size:12px;color:#777;margin-top:13px;line-height:1.5}
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.check{display:flex;align-items:center;gap:8px;padding:11px;border:1px solid #ddd;font-size:12px}
+.check input{width:auto}
+.total{background:#111;color:white;padding:18px;margin-top:20px;display:flex;justify-content:space-between;font-weight:bold}
+.submit{width:100%;padding:17px;background:#111;color:white;border:0;font-weight:bold;cursor:pointer;margin-top:18px}
+.submit:hover{background:#444}
+.parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:15px}
+.part{padding:24px;border:1px solid #ddd}
+.part h3{margin-bottom:10px}
+.part p{font-size:13px;color:#777;line-height:1.7}
+footer{background:#080808;color:white;padding:40px 8%;display:flex;justify-content:space-between;flex-wrap:wrap;gap:25px}
+footer p{color:#aaa;font-size:13px;margin-top:10px}
+@media(max-width:750px){
+ header{padding:18px 5%;flex-wrap:wrap;gap:15px}
+ nav{gap:12px}
+ .hero,.builder-grid{grid-template-columns:1fr}
+ .hero{padding:60px 6%}
+ section{padding:55px 6%}
+ .preview-panel{position:static}
+ model-viewer{height:330px}
+ .swatch-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
 
-      body {
-        min-width: 320px;
-        margin: 0;
-      }
+<body>
 
-      .site-header {
-        padding: 28px max(24px, calc((100% - 1120px) / 2));
-        color: #fff;
-        background: #111;
-      }
+<header>
+ <div class="logo">VOLT <span>CUSTOMS</span></div>
+ <nav>
+  <a href="#models">BIKES</a>
+  <a href="#customizer">CUSTOMIZER</a>
+  <a href="#builder">BUILD FORM</a>
+  <a href="#parts">PARTS</a>
+ </nav>
+</header>
 
-      .site-name {
-        margin: 0;
-        font-size: 14px;
-        font-weight: 800;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-      }
+<!-- HOMEPAGE -->
+<div class="hero">
+ <div>
+  <h1>BUILT<br>YOUR WAY.</h1>
+  <p>Make your electric dirt bike one of a kind. Choose your colors, graphics, seats, grips, wheels, and accessories. Your build. Your style. VOLT CUSTOMS.</p>
+  <a href="#customizer" class="btn">CUSTOMIZE YOUR BIKE</a>
+ </div>
+ <figure>
+  <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Sur-Ron%20Electric%20Dirt%20Bike%201a.jpg" alt="Electric dirt bike">
+  <figcaption>Photo by <a href="https://commons.wikimedia.org/wiki/File:Sur-Ron_Electric_Dirt_Bike_1a.jpg">Ivan Radic</a> on Wikimedia Commons, licensed under <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a>.</figcaption>
+ </figure>
+</div>
 
-      main {
-        width: min(1120px, calc(100% - 32px));
-        margin: 40px auto;
-      }
+<!-- BIKE MODELS -->
+<section id="models">
+ <h2 class="heading">BIKES WE WORK WITH</h2>
+ <p class="sub">Choose your electric dirt bike model.</p>
+ <div class="models">
+  <div class="model">SUR-RON<small>Light Bee / Ultra Bee</small></div>
+  <div class="model">TALARIA<small>XXX / Sting / Dragon</small></div>
+  <div class="model">E-RIDE PRO<small>SS / SR / other models</small></div>
+  <div class="model">79BIKE<small>Falcon and other models</small></div>
+  <div class="model">OTHER E-MOTO<small>Tell us your model</small></div>
+ </div>
+</section>
 
-      .part-gallery {
-        padding: clamp(20px, 4vw, 40px);
-        border: 1px solid #dedede;
-        border-radius: 12px;
-        background: #fff;
-        box-shadow: 0 12px 35px rgb(0 0 0 / 6%);
-      }
+<!-- 3D CUSTOMIZER -->
+<section class="dark" id="customizer">
+ <h2 class="heading">3D BIKE CUSTOMIZER</h2>
+ <p class="sub">Upload a compatible 3D bike model, rotate it, and experiment with colors and materials.</p>
 
-      .gallery-heading {
-        margin-bottom: 28px;
-      }
+ <div class="builder-grid">
+  <div class="panel preview-panel">
+   <h3>YOUR BIKE PREVIEW</h3>
+   <model-viewer id="bike3d"
+    camera-controls
+    auto-rotate
+    shadow-intensity="1"
+    exposure="1"
+    environment-image="neutral"
+    alt="Interactive electric dirt bike">
+   </model-viewer>
+   <p class="model-note">Upload a .GLB or .GLTF file below to display your own rotatable bike. Drag to rotate and use your scroll wheel or pinch to zoom.</p>
 
-      .gallery-heading h1 {
-        margin: 0 0 10px;
-        font-size: clamp(26px, 4vw, 38px);
-        letter-spacing: -0.04em;
-      }
+   <label for="modelFile">UPLOAD YOUR 3D BIKE MODEL</label>
+   <input type="file" id="modelFile" accept=".glb,.gltf">
+   <p class="model-note" id="modelStatus">No 3D model loaded. Upload a model to begin.</p>
+  </div>
 
-      .gallery-heading p {
-        max-width: 620px;
-        margin: 0;
-        color: #626262;
-        line-height: 1.6;
-      }
+  <div class="panel">
+   <div class="part-gallery">
+    <h3>CHOOSE A PART TO PREVIEW</h3>
+    <p class="model-note">Select a category, then click a color or style.</p>
 
-      .configurator {
-        display: grid;
-        grid-template-columns: minmax(0, 1.4fr) minmax(240px, 0.8fr);
-        gap: 36px;
-        align-items: start;
-      }
+    <div class="part-tabs">
+     <button class="part-tab active" data-part="seat">SEATS</button>
+     <button class="part-tab" data-part="grips">GRIPS</button>
+     <button class="part-tab" data-part="plastics">PLASTICS</button>
+     <button class="part-tab" data-part="wheels">WHEELS</button>
+     <button class="part-tab" data-part="graphics">GRAPHICS</button>
+     <button class="part-tab" data-part="fenders">FENDERS</button>
+    </div>
 
-      .part-tabs {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        margin: 0 0 22px;
-      }
+    <div class="swatch-grid" id="swatchGrid"></div>
+    <p class="preview-label" id="swatchMessage">Choose a seat cover color.</p>
+   </div>
 
-      .part-tab {
-        min-height: 44px;
-        padding: 10px 14px;
-        border: 1px solid #dedede;
-        border-radius: 6px;
-        color: #222;
-        background: #f5f5f5;
-        cursor: pointer;
-        font: inherit;
-        font-size: 14px;
-        font-weight: 700;
-      }
+   <h3>3D MATERIAL CONTROLS</h3>
+   <p class="model-note">After loading your model, choose the material that matches each part. The color selections will then update that material in the 3D preview.</p>
 
-      .part-tab[aria-pressed="true"] {
-        border-color: #111;
-        color: #fff;
-        background: #111;
-      }
+   <label>Seat material</label>
+   <select id="seatMaterial"><option value="">Load a model first</option></select>
+   <label>Seat color</label>
+   <input type="color" id="seatColor" value="#111111">
 
-      button:focus-visible {
-        outline: 3px solid #1769d2;
-        outline-offset: 3px;
-      }
+   <label>Grip material</label>
+   <select id="gripMaterial"><option value="">Load a model first</option></select>
+   <label>Grip color</label>
+   <input type="color" id="gripColor" value="#d71920">
 
-      .swatch-grid {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 12px;
-      }
+   <label>Plastics material</label>
+   <select id="plasticMaterial"><option value="">Load a model first</option></select>
+   <label>Plastics color</label>
+   <input type="color" id="plasticColor" value="#eeeeee">
 
-      .swatch-card {
-        min-width: 0;
-        padding: 10px;
-        border: 1px solid #dedede;
-        border-radius: 7px;
-        color: #222;
-        background: #fafafa;
-        cursor: pointer;
-        font: inherit;
-        font-size: 14px;
-        font-weight: 700;
-        text-align: left;
-      }
+   <label>Wheels / rims material</label>
+   <select id="wheelMaterial"><option value="">Load a model first</option></select>
+   <label>Wheel color</label>
+   <input type="color" id="wheelColor" value="#111111">
 
-      .swatch-card[aria-pressed="true"] {
-        border-color: #111;
-        box-shadow: 0 0 0 2px #111;
-      }
+   <button type="button" class="submit" id="resetModel">RESET MODEL COLORS</button>
+  </div>
+ </div>
+</section>
 
-      .swatch {
-        display: block;
-        height: 58px;
-        margin-bottom: 9px;
-        border: 1px solid rgb(0 0 0 / 14%);
-        border-radius: 4px;
-      }
+<!-- BUILD FORM -->
+<section class="builder" id="builder">
+ <h2 class="heading">BUILD YOUR BIKE</h2>
+ <p class="sub">Tell us what you want on your custom electric dirt bike.</p>
 
-      .preview-panel {
-        padding: 20px;
-        border: 1px solid #dedede;
-        border-radius: 8px;
-        background: #f8f8f8;
-      }
+ <div class="builder-grid">
+  <div class="panel">
+   <h3>YOUR BUILD DETAILS</h3>
+   <form id="buildForm">
 
-      .preview-panel h2 {
-        margin: 0 0 14px;
-        font-size: 17px;
-      }
+    <label>Bike model</label>
+    <select id="bike" required>
+     <option value="">Select your bike</option>
+     <option>Sur-Ron Light Bee</option>
+     <option>Sur-Ron Ultra Bee</option>
+     <option>Talaria XXX</option>
+     <option>Talaria Sting</option>
+     <option>Talaria Dragon</option>
+     <option>E-Ride Pro SS</option>
+     <option>E-Ride Pro SR</option>
+     <option>79Bike Falcon</option>
+     <option>Other electric dirt bike</option>
+    </select>
 
-      .preview-sample {
-        display: grid;
-        min-height: 190px;
-        place-items: center;
-        overflow: hidden;
-        border-radius: 6px;
-        background: #e8e8e8;
-      }
+    <label>Plastics color</label>
+    <select id="formPlastic">
+     <option>Black</option><option>White</option><option>Red</option>
+     <option>Blue</option><option>Green</option><option>Gray</option>
+     <option>Custom color</option>
+    </select>
 
-      .sample-part {
-        width: min(72%, 220px);
-        height: 96px;
-        border: 1px solid rgb(0 0 0 / 18%);
-        border-radius: 48% 18% 42% 20%;
-        background: #111;
-        box-shadow: 0 14px 20px rgb(0 0 0 / 18%);
-        transform: skewX(-12deg);
-        transition: background 180ms ease;
-      }
+    <label>Seat style</label>
+    <select id="formSeat">
+     <option>Black</option><option>Black and white</option>
+     <option>Black and red</option><option>Black and gray</option>
+     <option>Custom seat</option>
+    </select>
 
-      .preview-name {
-        margin: 16px 0 4px;
-        font-size: 16px;
-        font-weight: 700;
-      }
+    <label>Graphics style</label>
+    <select id="formGraphics">
+     <option>No graphics</option><option>Blackout</option>
+     <option>White graphics</option><option>Red graphics</option>
+     <option>Blue graphics</option><option>Custom graphics</option>
+    </select>
 
-      .preview-value {
-        margin: 0;
-        color: #626262;
-        font-size: 13px;
-      }
+    <label>Choose additional parts</label>
+    <div class="checks">
+     <label class="check"><input type="checkbox" value="Fenders" data-price="35"> Fenders $35</label>
+     <label class="check"><input type="checkbox" value="Handlebars" data-price="75"> Handlebars $75</label>
+     <label class="check"><input type="checkbox" value="Grips" data-price="20"> Grips $20</label>
+     <label class="check"><input type="checkbox" value="Foot pegs" data-price="45"> Foot pegs $45</label>
+     <label class="check"><input type="checkbox" value="Wheels / rims" data-price="250"> Wheels $250</label>
+     <label class="check"><input type="checkbox" value="Tires" data-price="120"> Tires $120</label>
+     <label class="check"><input type="checkbox" value="Headlight" data-price="45"> Headlight $45</label>
+     <label class="check"><input type="checkbox" value="Brake levers" data-price="35"> Brake levers $35</label>
+     <label class="check"><input type="checkbox" value="Graphics kit" data-price="100"> Graphics kit $100</label>
+     <label class="check"><input type="checkbox" value="Seat cover" data-price="65"> Seat cover $65</label>
+     <label class="check"><input type="checkbox" value="Forks" data-price="350"> Forks $350</label>
+     <label class="check"><input type="checkbox" value="Rear shock" data-price="300"> Rear shock $300</label>
+    </div>
 
-      .preview-note {
-        margin: 14px 0 0;
-        color: #626262;
-        font-size: 12px;
-        line-height: 1.5;
-      }
+    <label>Additional requests</label>
+    <textarea id="notes" placeholder="Describe your custom ideas..."></textarea>
 
-      .preview-label {
-        min-height: 1.5em;
-        margin: 18px 0 0;
-        color: #444;
-        font-size: 14px;
-        line-height: 1.5;
-      }
+    <label>Your name</label>
+    <input id="customerName" required placeholder="Your name">
 
-      @media (max-width: 760px) {
-        main {
-          margin: 20px auto;
-        }
+    <label>Email or phone number</label>
+    <input id="contact" required placeholder="Your contact information">
 
-        .configurator {
-          grid-template-columns: 1fr;
-          gap: 24px;
-        }
+    <div class="total">
+     <span>Estimated parts total</span>
+     <span id="total">$0</span>
+    </div>
+    <p class="model-note">Prices are estimates only. Final pricing depends on parts, labor, shipping, and compatibility.</p>
+    <button class="submit" type="submit">DOWNLOAD MY BUILD REQUEST</button>
+   </form>
+  </div>
 
-        .preview-panel {
-          grid-row: 1;
-        }
-      }
+  <div class="panel">
+   <h3>HOW IT WORKS</h3>
+   <br>
+   <p class="sub">1. Choose your electric dirt bike.</p>
+   <p class="sub">2. Pick the colors and parts you want.</p>
+   <p class="sub">3. Tell us about your custom ideas.</p>
+   <p class="sub">4. Download your build request.</p>
+   <p class="sub">5. Contact VOLT CUSTOMS to discuss your build.</p>
+  </div>
+ </div>
+</section>
 
-      @media (max-width: 500px) {
-        .swatch-grid {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-      }
+<!-- PARTS -->
+<section id="parts">
+ <h2 class="heading">MAKE IT YOURS.</h2>
+ <p class="sub">Explore the parts and upgrades available for your build.</p>
+ <div class="parts">
+  <div class="part"><h3>GRAPHICS</h3><p>Custom graphics kits, number plates, decals, and complete bike designs.</p></div>
+  <div class="part"><h3>BODYWORK</h3><p>Plastics, fenders, battery covers, and custom color combinations.</p></div>
+  <div class="part"><h3>SEATS</h3><p>Custom seat covers, colors, patterns, and grip styles.</p></div>
+  <div class="part"><h3>GRIPS</h3><p>Different grip colors and styles for your handlebars.</p></div>
+  <div class="part"><h3>WHEELS</h3><p>Custom rims, wheel colors, and tire options.</p></div>
+  <div class="part"><h3>PERFORMANCE</h3><p>Forks, rear shocks, handlebars, foot pegs, and more.</p></div>
+ </div>
+</section>
 
-      @media (prefers-reduced-motion: reduce) {
-        *,
-        *::before,
-        *::after {
-          scroll-behavior: auto !important;
-          transition-duration: 0.01ms !important;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <header class="site-header">
-      <p class="site-name">VOLT Customs</p>
-    </header>
+<footer>
+ <div>
+  <div class="logo">VOLT <span>CUSTOMS</span></div>
+  <p>Make your bike different.</p>
+ </div>
+ <div>
+  <strong>CONTACT</strong>
+  <p>Contact details coming soon.</p>
+ </div>
+ <p>© 2026 VOLT CUSTOMS</p>
+</footer>
 
-    <main>
-      <section class="part-gallery" aria-labelledby="galleryTitle">
-        <div class="gallery-heading">
-          <h1 id="galleryTitle">Part &amp; color preview</h1>
-          <p>Choose a bike part, then select a finish to see a live color sample.</p>
-        </div>
+<script>
+// PART COLOR PREVIEW TABS
+const partColors = {
+ seat:{
+  label:"Seat Covers",
+  target:"seatColor",
+  colors:[
+   ["Black","#111111"],["White","#eeeeee"],["Red","#d71920"],
+   ["Blue","#1455c0"],["Gray","#777777"],["Tan","#b58b5a"],
+   ["Black / Red","#68151b"],["Black / White","#aaaaaa"],["Neon Green","#8bc900"]
+  ]
+ },
+ grips:{
+  label:"Grips",
+  target:"gripColor",
+  colors:[
+   ["Black","#111111"],["White","#eeeeee"],["Red","#d71920"],
+   ["Blue","#1455c0"],["Gray","#777777"],["Purple","#713c91"],
+   ["Orange","#ed7614"],["Neon Green","#8bc900"],["Gold","#c5a12b"]
+  ]
+ },
+ plastics:{
+  label:"Plastics",
+  target:"plasticColor",
+  colors:[
+   ["Black","#111111"],["White","#eeeeee"],["Red","#d71920"],
+   ["Blue","#1455c0"],["Green","#16834a"],["Gray","#777777"],
+   ["Orange","#ed7614"],["Yellow","#e6c51a"],["Purple","#713c91"]
+  ]
+ },
+ wheels:{
+  label:"Wheels and Rims",
+  target:"wheelColor",
+  colors:[
+   ["Black","#111111"],["Silver","#bfc3c7"],["White","#eeeeee"],
+   ["Red","#d71920"],["Blue","#1455c0"],["Gold","#c5a12b"],
+   ["Bronze","#8b623e"],["Purple","#713c91"],["Neon Green","#8bc900"]
+  ]
+ },
+ graphics:{
+  label:"Graphics Kits",
+  target:null,
+  colors:[
+   ["Blackout","#111111"],["Black / White","#777777"],
+   ["Red / Black","#9e1720"],["Blue / White","#2361aa"],
+   ["Green / Black","#247346"],["Orange / Black","#bd5b12"],
+   ["Purple / Black","#623b83"],["Neon","#8bc900"]
+  ]
+ },
+ fenders:{
+  label:"Fenders",
+  target:"plasticColor",
+  colors:[
+   ["Black","#111111"],["White","#eeeeee"],["Red","#d71920"],
+   ["Blue","#1455c0"],["Green","#16834a"],["Gray","#777777"],
+   ["Orange","#ed7614"],["Yellow","#e6c51a"]
+  ]
+ }
+};
 
-        <div class="configurator">
-          <div>
-            <nav class="part-tabs" aria-label="Choose a part category">
-              <button class="part-tab" type="button" data-part="seat" aria-pressed="true">Seat Covers</button>
-              <button class="part-tab" type="button" data-part="grips" aria-pressed="false">Grips</button>
-              <button class="part-tab" type="button" data-part="plastics" aria-pressed="false">Plastics</button>
-              <button class="part-tab" type="button" data-part="wheels" aria-pressed="false">Wheels</button>
-              <button class="part-tab" type="button" data-part="graphics" aria-pressed="false">Graphics</button>
-              <button class="part-tab" type="button" data-part="fenders" aria-pressed="false">Fenders</button>
-            </nav>
+const grid=document.getElementById("swatchGrid");
+const message=document.getElementById("swatchMessage");
+const tabs=document.querySelectorAll(".part-tab");
 
-            <div class="swatch-grid" id="swatchGrid" role="group" aria-label="Available colors"></div>
-            <p class="preview-label" id="previewLabel" role="status" aria-live="polite"></p>
-          </div>
+function showPart(part){
+ const data=partColors[part];
+ tabs.forEach(tab=>{
+  tab.classList.toggle("active",tab.dataset.part===part);
+ });
+ grid.innerHTML="";
 
-          <aside class="preview-panel" aria-labelledby="previewTitle">
-            <h2 id="previewTitle">Live color sample</h2>
-            <div class="preview-sample" aria-hidden="true">
-              <div class="sample-part" id="samplePart"></div>
-            </div>
-            <p class="preview-name" id="previewName"></p>
-            <p class="preview-value" id="previewValue"></p>
-            <p class="preview-note">This standalone sample previews the finish; it is not a 3D bike model.</p>
-          </aside>
-        </div>
-      </section>
-    </main>
+ data.colors.forEach(([name,color])=>{
+  const card=document.createElement("button");
+  card.type="button";
+  card.className="swatch-card";
 
-    <script>
-      const partColors = {
-        seat: {
-          label: "Seat Covers",
-          colors: [
-            { name: "Black", color: "#111111" },
-            { name: "White", color: "#eeeeee" },
-            { name: "Red", color: "#d71920" },
-            { name: "Blue", color: "#1455c0" },
-            { name: "Gray", color: "#777777" },
-            { name: "Tan", color: "#b58b5a" },
-            { name: "Purple", color: "#713c91" },
-            { name: "Green", color: "#16834a" },
-            { name: "Orange", color: "#ed7614" }
-          ]
-        },
-        grips: {
-          label: "Grips",
-          colors: [
-            { name: "Black", color: "#111111" },
-            { name: "White", color: "#eeeeee" },
-            { name: "Red", color: "#d71920" },
-            { name: "Blue", color: "#1455c0" },
-            { name: "Green", color: "#16834a" },
-            { name: "Purple", color: "#713c91" },
-            { name: "Orange", color: "#ed7614" },
-            { name: "Gold", color: "#c5a12b" }
-          ]
-        },
-        plastics: {
-          label: "Plastics",
-          colors: [
-            { name: "Black", color: "#111111" },
-            { name: "White", color: "#eeeeee" },
-            { name: "Red", color: "#d71920" },
-            { name: "Blue", color: "#1455c0" },
-            { name: "Green", color: "#16834a" },
-            { name: "Gray", color: "#777777" },
-            { name: "Orange", color: "#ed7614" },
-            { name: "Yellow", color: "#e6c51a" },
-            { name: "Purple", color: "#713c91" }
-          ]
-        },
-        wheels: {
-          label: "Wheels & Rims",
-          colors: [
-            { name: "Black", color: "#111111" },
-            { name: "Silver", color: "#bfc3c7" },
-            { name: "White", color: "#eeeeee" },
-            { name: "Red", color: "#d71920" },
-            { name: "Blue", color: "#1455c0" },
-            { name: "Gold", color: "#c5a12b" },
-            { name: "Bronze", color: "#8b623e" },
-            { name: "Purple", color: "#713c91" }
-          ]
-        },
-        graphics: {
-          label: "Graphics Kits",
-          colors: [
-            { name: "Blackout", color: "#111111", preview: "#111111" },
-            { name: "Black & White", color: "#777777", preview: "linear-gradient(135deg, #111 0 50%, #eee 50%)" },
-            { name: "Red & Black", color: "#9e1720", preview: "linear-gradient(135deg, #9e1720 0 50%, #111 50%)" },
-            { name: "Blue & White", color: "#2361aa", preview: "linear-gradient(135deg, #2361aa 0 50%, #eee 50%)" },
-            { name: "Green & Black", color: "#247346", preview: "linear-gradient(135deg, #247346 0 50%, #111 50%)" },
-            { name: "Orange & Black", color: "#bd5b12", preview: "linear-gradient(135deg, #bd5b12 0 50%, #111 50%)" },
-            { name: "Purple & Black", color: "#623b83", preview: "linear-gradient(135deg, #623b83 0 50%, #111 50%)" },
-            { name: "Neon Green", color: "#8bc900", preview: "linear-gradient(135deg, #8bc900 0 50%, #111 50%)" }
-          ]
-        },
-        fenders: {
-          label: "Fenders",
-          colors: [
-            { name: "Black", color: "#111111" },
-            { name: "White", color: "#eeeeee" },
-            { name: "Red", color: "#d71920" },
-            { name: "Blue", color: "#1455c0" },
-            { name: "Green", color: "#16834a" },
-            { name: "Gray", color: "#777777" },
-            { name: "Orange", color: "#ed7614" },
-            { name: "Yellow", color: "#e6c51a" }
-          ]
-        }
-      };
+  const swatch=document.createElement("div");
+  swatch.className="swatch";
+  swatch.style.background=color;
 
-      const colorInputIds = {
-        seat: "seatColor",
-        grips: "gripColor",
-        plastics: "plasticColor",
-        wheels: "wheelColor",
-        graphics: "graphicsColor",
-        fenders: "plasticColor"
-      };
-      const selectedColors = Object.fromEntries(
-        Object.entries(partColors).map(([part, data]) => [part, data.colors[0]])
-      );
-      const grid = document.getElementById("swatchGrid");
-      const previewLabel = document.getElementById("previewLabel");
-      const previewName = document.getElementById("previewName");
-      const previewValue = document.getElementById("previewValue");
-      const samplePart = document.getElementById("samplePart");
-      const tabs = document.querySelectorAll(".part-tab");
+  const text=document.createElement("span");
+  text.textContent=name;
 
-      function selectColor(part, color) {
-        selectedColors[part] = color;
-        const data = partColors[part];
-        samplePart.style.background = color.preview || color.color;
-        previewName.textContent = `${data.label}: ${color.name}`;
-        previewValue.textContent = color.color.toUpperCase();
-        previewLabel.textContent = `${color.name} selected for ${data.label}.`;
+  card.append(swatch,text);
 
-        const input = document.getElementById(colorInputIds[part]);
-        if (input instanceof HTMLInputElement) {
-          input.value = color.color;
-          input.dispatchEvent(new Event("input", { bubbles: true }));
-        }
-      }
+  card.addEventListener("click",()=>{
+   grid.querySelectorAll(".swatch-card").forEach(item=>{
+    item.classList.remove("active");
+   });
+   card.classList.add("active");
 
-      function showPart(part) {
-        const data = partColors[part];
-        if (!data) {
-          return;
-        }
+   message.textContent=name+" selected for "+data.label+".";
 
-        tabs.forEach((tab) => {
-          tab.setAttribute("aria-pressed", String(tab.dataset.part === part));
-        });
+   if(data.target){
+    const colorInput=document.getElementById(data.target);
+    colorInput.value=color;
+    colorInput.dispatchEvent(new Event("input",{bubbles:true}));
+   }
+  });
 
-        grid.replaceChildren();
-        data.colors.forEach((color) => {
-          const card = document.createElement("button");
-          card.type = "button";
-          card.className = "swatch-card";
-          card.setAttribute("aria-pressed", String(selectedColors[part] === color));
+  grid.appendChild(card);
+ });
+ message.textContent="Choose a "+data.label+" color.";
+}
 
-          const swatch = document.createElement("span");
-          swatch.className = "swatch";
-          swatch.setAttribute("aria-hidden", "true");
-          swatch.style.background = color.preview || color.color;
+tabs.forEach(tab=>{
+ tab.addEventListener("click",()=>{
+  showPart(tab.dataset.part);
+ });
+});
+showPart("seat");
 
-          const name = document.createElement("span");
-          name.textContent = color.name;
-          card.append(swatch, name);
+// 3D MODEL UPLOAD AND MATERIAL CUSTOMIZATION
+const viewer=document.getElementById("bike3d");
+const fileInput=document.getElementById("modelFile");
+const status=document.getElementById("modelStatus");
 
-          card.addEventListener("click", () => {
-            grid.querySelectorAll(".swatch-card").forEach((item) => {
-              item.setAttribute("aria-pressed", "false");
-            });
-            card.setAttribute("aria-pressed", "true");
-            selectColor(part, color);
-          });
+const materialGroups=[
+ ["seatMaterial","seatColor"],
+ ["gripMaterial","gripColor"],
+ ["plasticMaterial","plasticColor"],
+ ["wheelMaterial","wheelColor"]
+];
 
-          grid.appendChild(card);
-        });
+let originalColors=new Map();
+let modelObjectUrl=null;
+let loadNumber=0;
 
-        selectColor(part, selectedColors[part]);
-      }
+fileInput.addEventListener("change",async()=>{
+ const file=fileInput.files[0];
+ if(!file)return;
 
-      tabs.forEach((tab) => {
-        tab.addEventListener("click", () => showPart(tab.dataset.part));
-      });
+ if(modelObjectUrl)URL.revokeObjectURL(modelObjectUrl);
+ modelObjectUrl=URL.createObjectURL(file);
+ const currentLoad=++loadNumber;
 
-      showPart("seat");
-    </script>
-  </body>
+ status.textContent="Loading your bike model...";
+ viewer.src=modelObjectUrl;
+
+ try{
+  await new Promise((resolve,reject)=>{
+   const timeout=setTimeout(()=>reject(new Error("Timeout")),30000);
+   viewer.addEventListener("load",()=>{
+    clearTimeout(timeout);
+    resolve();
+   },{once:true});
+   viewer.addEventListener("error",()=>{
+    clearTimeout(timeout);
+    reject(new Error("Load failed"));
+   },{once:true});
+  });
+
+  if(currentLoad!==loadNumber)return;
+
+  const materials=viewer.model.materials;
+  originalColors=new Map();
+
+  materials.forEach((material,index)=>{
+   const pbr=material.pbrMetallicRoughness;
+   const original=pbr.baseColorFactor?[...pbr.baseColorFactor]:[1,1,1,1];
+   originalColors.set(index,original);
+  });
+
+  materialGroups.forEach(([selectId])=>{
+   const select=document.getElementById(selectId);
+   select.innerHTML='<option value="">Choose material...</option>';
+
+   materials.forEach((material,index)=>{
+    const option=document.createElement("option");
+    option.value=index;
+    option.textContent=material.name||("Material "+(index+1));
+    select.appendChild(option);
+   });
+  });
+
+  status.textContent="Bike loaded! Choose the material for each part, then pick colors.";
+ }catch(error){
+  if(currentLoad===loadNumber){
+   status.textContent="Could not load this model. Try a GLB file with embedded textures.";
+  }
+ }
+});
+
+// APPLY COLORS TO SELECTED 3D MATERIALS
+materialGroups.forEach(([selectId,colorId])=>{
+ const select=document.getElementById(selectId);
+ const colorInput=document.getElementById(colorId);
+
+ function applyColor(){
+  if(!viewer.model||select.value==="")return;
+
+  const material=viewer.model.materials[Number(select.value)];
+  if(!material||!material.pbrMetallicRoughness)return;
+
+  const hex=colorInput.value;
+  const rgba=[
+   parseInt(hex.slice(1,3),16)/255,
+   parseInt(hex.slice(3,5),16)/255,
+   parseInt(hex.slice(5,7),16)/255,
+   1
+  ];
+
+  material.pbrMetallicRoughness.setBaseColorFactor(rgba);
+  status.textContent="Your selected material color has been updated.";
+ }
+
+ select.addEventListener("change",applyColor);
+ colorInput.addEventListener("input",applyColor);
+});
+
+// RESET ORIGINAL MODEL COLORS
+document.getElementById("resetModel").addEventListener("click",()=>{
+ if(!viewer.model)return;
+
+ viewer.model.materials.forEach((material,index)=>{
+  const original=originalColors.get(index);
+  if(original){
+   material.pbrMetallicRoughness.setBaseColorFactor([...original]);
+  }
+ });
+ status.textContent="Original model colors restored.";
+});
+
+// LIVE PRICE CALCULATOR
+const checkboxes=document.querySelectorAll('#buildForm input[type="checkbox"]');
+const total=document.getElementById("total");
+
+function updateTotal(){
+ let amount=0;
+ checkboxes.forEach(box=>{
+  if(box.checked)amount+=Number(box.dataset.price);
+ });
+ total.textContent="$"+amount.toLocaleString("en-US");
+}
+
+checkboxes.forEach(box=>{
+ box.addEventListener("change",updateTotal);
+});
+
+// DOWNLOAD BUILD REQUEST
+document.getElementById("buildForm").addEventListener("submit",event=>{
+ event.preventDefault();
+
+ const selected=[];
+ checkboxes.forEach(box=>{
+  if(box.checked){
+   selected.push(box.value+" ($"+box.dataset.price+")");
+  }
+ });
+
+ const details=`
+VOLT CUSTOMS - BUILD REQUEST
+
+CUSTOMER
+Name: ${document.getElementById("customerName").value}
+Contact: ${document.getElementById("contact").value}
+
+BIKE
+Model: ${document.getElementById("bike").value}
+
+CUSTOMIZATION
+Plastics: ${document.getElementById("formPlastic").value}
+Seat: ${document.getElementById("formSeat").value}
+Graphics: ${document.getElementById("formGraphics").value}
+
+SELECTED PARTS
+${selected.length?selected.join("\n"):"No additional parts selected"}
+
+ESTIMATED PARTS TOTAL
+${total.textContent}
+
+ADDITIONAL REQUESTS
+${document.getElementById("notes").value}
+
+This is a build request, not a confirmed order.
+`;
+
+ const blob=new Blob([details],{type:"text/plain"});
+ const url=URL.createObjectURL(blob);
+ const link=document.createElement("a");
+ link.href=url;
+ link.download="VOLT-CUSTOMS-Build-Request.txt";
+ link.click();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+});
+</script>
+
+</body>
 </html>
